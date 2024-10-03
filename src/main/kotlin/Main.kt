@@ -56,7 +56,6 @@ suspend fun main() {
 
 suspend fun checkIfStorviltExistInHjorteviltRegisteret(storvilt: Storvilt): Boolean {
     val response = httpClient.get(HJORTEVILT_BASE_API_URL.plus("v0/individer/${storvilt.settOgSkuttUid}"))
-    println("storviltId: ${storvilt.storviltId}, statusCode: ${response.status.value}")
     return response.status.value in 200..299
 }
 
