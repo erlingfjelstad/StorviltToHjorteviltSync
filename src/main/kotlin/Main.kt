@@ -11,11 +11,19 @@ import org.example.models.dto.TerrengDto
 
 
 suspend fun main() {
+    /**
+     * Vi leser inn fra StorviltRapport.csv som ligger i repoet og parser til et Storvilt-objekt
+     * Hvis det ikke finnes noen settOgSkuttUid (tilsvarer id for et skutt dyr i Hjorteviltregisteret) så filtrerer vi dem ut
+     * Hvis det ikke finnes noe jaktfeltId eller hvis jaktfeltId == "err", så blir det filtrert ut
+     */
     val storvilt = parseCsvToStorvilt("StorviltRapport.csv")
         .filter { storvilt ->
-            storvilt.settOgSkuttUid != null // settOgSkuttUid tilsvarer id for et skutt dyr i Hjorteviltregisteret
+            storvilt.settOgSkuttUid != null
         }.filter { storvilt ->
-            storvilt.jaktfeltId != null && !storvilt.jaktfeltId.contentEquals("err", true) // Filtrerer ut alle jaktfelt som er null eller har "err" som jaktfelt navn
+            storvilt.jaktfeltId != null && !storvilt.jaktfeltId.contentEquals(
+                "err",
+                ignoreCase = true
+            )
         }
 
     storvilt.onEach { storvilt ->
